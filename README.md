@@ -2,7 +2,7 @@
 
 An interactive portfolio where each section is a document inside an investigation bag. Open the bag, pick a file, and read it.
 
-**Live site:** https://kevinola.github.io/YOUR-REPO/  <!-- replace after hosting -->
+**Live site:** https://kevinola.github.io/Abdulmalik-s-Portfolio/  <!-- replace after hosting -->
 
 ---
 
