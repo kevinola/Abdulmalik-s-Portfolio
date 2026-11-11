@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Abdulmalik Akande | Software Developer & Web Developer</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+<style>
+
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: #050505; overflow: hidden; font-family: "Courier New", monospace; color: #111; }
+
+  #viewport { position: fixed; inset: 0; overflow: hidden; }
+
+
+
+  /* The whole bag. Fixed logical size*/
+  #world {
+    position: absolute; width: 940px; height: 900px;
+    left: calc(50% - 470px); top: calc(50% - 450px);
+    border-radius: 14px;
+    background: linear-gradient(115deg, rgba(255,255,255,.07) 0 8%, transparent 22% 70%, rgba(255,255,255,.05) 85%),
+      repeating-linear-gradient(63deg, transparent 0 46px, rgba(255,255,255,.035) 47px 49px, transparent 50px 120px),
+      repeating-linear-gradient(-28deg, transparent 0 70px, rgba(255,255,255,.03) 71px 73px, transparent 74px 150px),
+      #0c0c0d;
+    box-shadow: 0 0 0 2px #1d1d20 inset, 0 30px 80px rgba(0,0,0,.7);
+    transition: transform 1.2s cubic-bezier(.22,.61,.36,1);
+    transform-origin: center center; will-change: transform; backface-visibility: hidden;
+  }
+
+
+
+  /* Decoration */
+  .tape { 
+    position: absolute; height: 34px; width: 760px; z-index: 1;
+    background: repeating-linear-gradient(45deg, #f6c619 0 16px, #111 16px 32px); opacity: .9; }
+  .tape.t1 { left: -60px; bottom: 150px; transform: rotate(-8deg); }
+  .tape.t2 { right: -120px; top: 395px; transform: rotate(5deg); width: 420px; }
+  
+  @property --holo-angle {
+    syntax: '<angle>'; initial-value: 0deg;
+    inherits: false;}
+  @keyframes colorShift {
+    0% {--holo-angle: 0deg;}
+    100% {--holo-angle: 360deg;}
+  }
+  .holo {
+    position: absolute; right: 40px; bottom: 36px;
+    width: 120px; height: 120px; border-radius: 50%; z-index: 7;
+    /* Use the custom variable inside the gradient */
+    background: conic-gradient(from var(--holo-angle), #ff6ad5, #ffd36a, #6affc3, #6ab8ff, #b36aff, #ff6ad5);
+    box-shadow: 0 0 24px rgba(180, 120, 255, .5);
+    display: grid; place-items: center;
+    font: 900 54px/1 Arial, sans-serif; 
+    color: #111;
+    /* Animate the variable instead of the element */
+    animation: colorShift 4s linear infinite;}
+
+
+
+
+
+
+  /* Pieces */
+  .piece { 
+    position: absolute; cursor: pointer; outline-offset: 6px; 
+    box-shadow: 0 14px 34px rgba(0,0,0,.6); backface-visibility: hidden; }
+  .piece:focus-visible { outline: 3px solid #f6c619; }
+  .piece.on { cursor: default; z-index: 12 !important; }
+  .teaser, .detail { 
+    position: absolute; inset: 0; padding: 22px; overflow: hidden; }
+  .detail { opacity: 0; pointer-events: none; }
+  .teaser {
+    opacity: 1; transform: translateY(0) scale(1);
+    transition: opacity .32s ease, transform .48s cubic-bezier(.16,1,.3,1);
+  }
+  .piece.on .teaser {
+    opacity: 0; transform: translate3d(0,-7px,0) scale(.99); transition-delay: .16s;
+  }
+  .piece .detail {
+    transform: translate3d(0,8px,0);
+    transition: opacity .38s ease .12s, transform .48s cubic-bezier(.16,1,.3,1) .12s;
+  }
+  .piece.on .detail {
+    opacity: 1; transform: translateY(0); pointer-events: auto;
+  }
+
+  h2 { font: 900 34px/1 Impact, "Arial Black", sans-serif; letter-spacing: .5px; }
+  h3 { font: 900 22px/1.1 Impact, "Arial Black", sans-serif; margin-bottom: 10px; }
+  p, li, td, .small { font-size: 16px; line-height: 1.45; }
+  .small { font-size: 13px; opacity: .7; }
+  .lines span { 
+    display: block; height: 7px; background: currentColor; 
+    opacity: .25; margin-bottom: 9px; border-radius: 2px; }
+  .hint { 
+    position: absolute; left: 22px; bottom: 16px; 
+    font-size: 13px; letter-spacing: 1px; opacity: .6; }
+
+
+
+  /* ID card: Introduction */
+  .id { 
+    left: 30px; top: 50px; width: 440px; 
+    height: 340px; transform: rotate(-2deg);
+    background: #ecebe6; border-radius: 10px; }
+  .photo { 
+    width: 112px; height: 132px; background: #d6d4cd; 
+    border: 1px dashed #777; border-radius: 6px; 
+    position: relative; overflow: hidden; float: left; 
+    margin: 0 18px 12px 0; display: grid; place-items: center; 
+    text-align: center; color: #555;  letter-spacing: 1px;
+    font: 700 11px/1.4 "Courier New", monospace; }
+  .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+
+
+  /* PROJECTS */
+  .project-list { 
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px; margin-top: 18px; }
+  .project-item { 
+    border: 1px solid rgba(0,0,0,.25); 
+    padding: 13px; min-height: 112px; 
+    border-radius: 5px;
+    display:flex; flex-direction:column; gap:8px; }
+  .project-item b { 
+    display:block; font: 900 19px/1.1 Impact, "Arial Black", sans-serif; 
+    margin-bottom: 7px; }
+  .project-item p { font-size: 10px; line-height: 1.4; }
+  .project-shot {
+    min-height:112px; border:1px dashed rgba(0,0,0,.35); border-radius:4px;
+    display:grid; place-items:center; text-align:center; padding:12px;
+    background:linear-gradient(135deg, rgba(0,0,0,.06), rgba(0,0,0,.015));
+    color:rgba(0,0,0,.55); font:700 11px/1.5 "Courier New", monospace;
+    letter-spacing:1px;}
+  .project-meta { font-size:12px !important; opacity:.68; }
+  .project-shot.has-img { padding:0; border-style:solid; overflow:hidden; background:#c9eaf4; }
+  .project-shot.has-img img { 
+    display:block; width:100%; height:100%; 
+    max-height:300px; object-fit:contain; }
+  .project-item details { font-size:14px; }
+  .project-item summary { 
+    margin-top: 10px; cursor:pointer; font:900 18px "Courier New", monospace; 
+    letter-spacing:1px; padding:4px 0; color: darkred;}
+  .project-item ul { margin:6px 0 4px 18px; line-height:1.5; }
+  .tech-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .tech-tags span { border:1px solid rgba(0,0,0,.4); 
+    border-radius:3px; padding:2px 7px; 
+    font:700 11px/1.5 "Courier New", monospace; }
+  .ticket p.small{
+    line-height: 1.6;
+    background-color: transparent!important;
+    font-family: cursive; font-style: italic;
+    font-size: 18px;  margin: 22px 0; }
+  .project-quote{
+    margin-top: 10px;
+    line-height: 1.6; background-color: transparent!important;} 
+  .quote-signature{
+    font-size: 12px;
+  }  
+     
+
+
+
+
+
+  /* SKILLS */
+  .soft-skills { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .soft-skills span { border:1px solid currentColor; border-radius:20px; padding:5px 10px; font-size:13px; }
+  .skill-group { margin: 18px 0; }
+  .skill-group b { display:block; font-size: 26px; margin-bottom: 6px; }
+
+  /* CONTACT  */
+  .contact-link { display:inline-block; color:inherit; text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere; }
+  .contact-piece { left: 245px; top: 360px; width: 440px; height: 158px; transform: rotate(-12deg); background:#f6c619; border-radius:8px; z-index: 8; box-shadow: 0 18px 38px rgba(0,0,0,.55); }
+  .contact-piece .teaser { padding:17px 24px; }
+  .contact-piece h2 { font-size:29px; letter-spacing:.7px; }
+  .contact-piece .teaser p { max-width: 340px; font-size:14px; }
+  .contact-piece .detail { background:#f6c619; }
+  .contact-piece .hint { left:24px; bottom:12px; }
+
+
+  /* INTRODUCTION */
+  .sticker { position: absolute; right: 18px; top: -16px; background: #f6c619; padding: 6px 14px; font: 900 22px Arial, sans-serif; transform: rotate(6deg); }
+  .id table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .id td { border: 1px solid #bbb; padding: 6px 10px; }
+  .id td:first-child { width: 38%; opacity: .6; }
+
+
+
+
+  /* Ticket: PROJECT (rotated on the bag, upright when focused) */
+  .ticket { left: 490px; top: 90px; width: 340px; height: 420px; transform: rotate(-90deg) translate(0,0);
+    background: #f6c619; border-radius: 8px; }
+  .ticket::before, .ticket::after { content: ""; position: absolute; top: calc(50% - 15px); width: 30px; height: 30px; border-radius: 50%; background: #0c0c0d; }
+  .ticket::before { left: -15px; } .ticket::after { right: -15px; }
+  .barcode { height: 46px; margin-top: 14px; background: repeating-linear-gradient(90deg, #111 0 3px, transparent 3px 5px, #111 5px 6px, transparent 6px 10px); }
+  .ticket .yr { font: 900 54px/1 Impact, sans-serif; margin: 10px 0; }
+  .ticket li { margin-left: 18px; margin-bottom: 8px; }
+
+  /* Paper: Experience */
+  .paper { left: 20px; top: 440px; width: 420px; height: 400px; transform: rotate(2deg);
+    background: #f1f0eb; border-radius: 4px; }
+  .role { border-bottom: 1px dashed #888; padding: 8px 0; }
+  .role b { display: block; font-size: 17px; }
+  .now { font: 900 38px Impact, sans-serif; margin-top: 16px; }
+
+  /*  Skills panel */
+  .skills { left: 470px; top: 480px; width: 420px; height: 340px; transform: rotate(-1deg);
+    background: #17171a; color: #eee; border: 1px solid #555; border-radius: 6px; }
+  .badges { display: flex; gap: 10px; margin: 16px 0; }
+  .badges i { font: 900 22px Arial, sans-serif; font-style: normal; padding: 8px 12px; border: 2px solid #eee; border-radius: 6px; }
+  .bar { height: 10px; background: #333; border-radius: 5px; margin: 4px 0 14px; }
+  .bar span { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #6ab8ff, #b36aff); }
+
+
+
+
+  /* Navigation */
+  nav {
+  max-width: 95vw;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 8px;
+  }
+  nav::-webkit-scrollbar { display: none; } /* Hide scrollbar for clean UI */
+
+  nav { position: fixed;
+        left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+         z-index: 10; display: flex; gap: 8px; }
+  nav button { height: 46px; padding: 0 16px; border: none; border-radius: 12px; font: 700 15px "Courier New", monospace;
+    background: #26262a; color: #eee; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,.5); }
+  nav button.cur { background: #f6c619; color: #111; }
+  nav button:focus-visible { outline: 3px solid #fff; }
+
+
+
+
+
+  /* Full-screen reading view. */
+  #expanded-shell {
+    position: fixed; z-index: 20; left: 0; top: 0; width: 100vw; height: 100vh;
+    height: 100dvh; overflow: hidden; overscroll-behavior: contain;
+    box-shadow: none; border-radius: 0; opacity: 1;
+    transition: transform .78s cubic-bezier(.16,1,.3,1), border-radius .78s cubic-bezier(.16,1,.3,1);
+    transform-origin: top left; will-change: transform, border-radius; backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  #expanded-shell.is-open { overflow-y: auto; overflow-x: hidden; }
+  #expanded-shell .detail.is-expanded-detail {
+    position: relative; inset: auto; width: 100%; max-width: 900px; min-height: 100%;
+    margin: 0 auto; padding: clamp(82px, 10vh, 112px) clamp(22px, 6vw, 76px) 64px;
+    overflow: visible; opacity: 0; transform: translateY(18px) scale(.985);
+    transform-origin: top center; pointer-events: auto;
+    transition: opacity .34s ease .12s, transform .48s cubic-bezier(.16,1,.3,1) .08s;
+  }
+  #expanded-shell.is-open .detail.is-expanded-detail {
+    opacity: 1; transform: translateY(0) scale(1);
+  }
+  #expanded-shell:not(.is-open) .detail.is-expanded-detail {
+    transition-delay: 0s;
+  }
+  #expanded-shell .detail.is-expanded-detail h3 { font-size: clamp(28px, 4vw, 42px); margin-bottom: 22px; }
+  #expanded-shell .detail.is-expanded-detail p,
+  #expanded-shell .detail.is-expanded-detail li,
+  #expanded-shell .detail.is-expanded-detail td,
+  #expanded-shell .detail.is-expanded-detail .small { font-size: clamp(16px, 1.5vw, 19px); line-height: 1.65; }
+  #expanded-shell .detail.is-expanded-detail table { margin-top: 24px; }
+  #expanded-shell .detail.is-expanded-detail td { padding: 10px 12px; overflow-wrap: anywhere; }
+  #expanded-shell .detail.is-expanded-detail ul { padding-left: 22px; }
+
+  #expanded-back {
+    position: fixed; z-index: 30; top: calc(14px + env(safe-area-inset-top, 0px));
+    left: calc(14px + env(safe-area-inset-left, 0px)); width: 46px; height: 46px;
+    border: 1px solid currentColor; border-radius: 50%; background: rgba(10,10,10,.12);
+    color: inherit; font: 700 26px/1 Arial, sans-serif; cursor: pointer;
+    display: grid; place-items: center; opacity: 0; pointer-events: none;
+    transition: opacity .25s ease; backdrop-filter: blur(8px);
+  }
+
+  body.is-expanded #expanded-back { opacity: 1; pointer-events: auto; }
+  body.is-expanded nav { opacity: 0; pointer-events: none; visibility: hidden; }
+  nav { transition: opacity .25s ease, visibility .25s ease; }
+  #expanded-back:focus-visible { outline: 3px solid #f6c619; outline-offset: 3px; }
+
+
+
+
+  /* Contact detail content */
+  .contact-piece #detail {
+    display: grid; grid-template-columns: 2fr 1.5fr 1fr;
+    gap: 40px; padding-bottom: 40px;
+    border-bottom: 1px solid #334155; }
+  .contact-piece .footer-col h3 {
+    font-size: 1.25rem; font-weight: 700;
+    margin-bottom: 15px; color: var(--yellow);
+    letter-spacing: -0.02em; }
+  .contact-piece .footer-col p {
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1.525rem; line-height: 1.6;
+    max-width: 460px; }
+  .contact-list { }
+  .contact-list li{ margin-bottom: 12px; }
+  .contact-list li a, .contact-list li span {
+    display: flex; align-items: center;
+    gap: 12px; color: var(--yellow);
+    font-size: 0.95rem;  text-decoration: none;
+    transition: color 0.2s ease; }
+  .contact-list li a:hover {color: var(--blue);}
+  .contact-list i {
+      color: var(--blue); font-size: 1rem;
+      width: 20px; text-align: center; }
+  .contact-social .social-links {
+      display: flex; gap: 12px;
+      margin-top: 5px; }
+  .contact-social .social-links a {
+      color: var(--paper);border-radius: 8px;
+      display: flex; align-items: center;justify-content: center;
+      font-size: 1.1rem; text-decoration: none;
+      transition: all 0.2s ease; }
+  .contact-social .social-links a:hover {
+    color: var(--yellow);transform: translateY(-3px);}
+  .footer-bottom {
+      width:100%; display: flex;
+      justify-content: center; padding-top: 30px;
+      align-items: center;
+      font-size: 0.875rem; }
+
+
+
+
+
+
+  /* Phone-Size */
+  @media (max-width: 600px) {
+    .project-list { grid-template-columns:1fr; }
+    .project-shot { min-height:150px; }
+
+    #expanded-shell .detail.is-expanded-detail {
+      padding: calc(78px + env(safe-area-inset-top, 0px)) 22px calc(36px + env(safe-area-inset-bottom, 0px));
+    }
+    #expanded-shell .detail.is-expanded-detail td { padding: 8px 7px; }
+    #expanded-shell .detail.is-expanded-detail td:first-child { width: 32%; }
+  }
+
+  /*   */
+  @media (prefers-reduced-motion: reduce) {
+    #world, #expanded-shell, #expanded-back, nav,
+    .teaser, .piece .detail, #expanded-shell .detail.is-expanded-detail {
+      transition-duration: .01ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
+
+
+
+
+  /* TUTORIAL */
+  #world.blanket { z-index: 10; }
+  #world.blanket::after { content:""; position:absolute; inset:0; z-index:11 !important; background:rgba(0,0,0,.68); pointer-events:auto; border-radius:inherit; }
+
+
+  body.tutorial-step-1 .piece.tutorial-target { 
+    z-index:12 !important; filter:none !important;
+    pointer-events:auto;
+    box-shadow:0 0 0 3px #f6c619, 0 0 34px rgba(246,198,25,.38), 0 18px 42px rgba(0,0,0,.7); animation:tutorial-pulse 2.2s ease-in-out infinite; }
+
+  .hidden { display:none !important; }
+  #tutorial-hand, #tutorial-hand-back, #tutorial-hand-x, #tutorial-skip { display:none; }
+
+  body.hands #tutorial-hand, body.hands-back #tutorial-hand-back, body.hands-x #tutorial-hand-x, body.tutorial-step-1 #tutorial-skip { display:block; }
+
+  #tutorial-hand { position:fixed; z-index:60; width:100px; height:76px; font:58px/1 system-ui,sans-serif; pointer-events:none; filter:drop-shadow(0 5px 5px rgba(0,0,0,.45)); animation:tutorial-point 1.15s ease-in-out infinite; }
+  #tutorial-hand p {color: white;}
+
+  /* Stage 3: second hand pointing up at the Back button (top-left) */
+  #tutorial-hand-back {
+    position:fixed; z-index:60; pointer-events:none;
+    left:calc(10px + env(safe-area-inset-left, 0px));
+    top:calc(66px + env(safe-area-inset-top, 0px));
+    font:58px/1 system-ui,sans-serif;
+    filter:drop-shadow(0 5px 5px rgba(0,0,0,.45));
+    animation:tutorial-point-up 1.15s ease-in-out infinite;
+  }
+  #tutorial-hand-back p {
+    display:inline-block; margin-top:2px; padding:6px 10px; border-radius:6px;
+    background:#f6c619; color:#111; font:900 12px/1.2 "Courier New",monospace;
+    letter-spacing:.5px; white-space:nowrap; box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  #expanded-back.tutorial-glow {
+    background:rgba(246,198,25,.4);
+    animation:back-pulse 1.4s ease-in-out infinite;
+  }
+  /* Stage 4: third hand above the X button in the bottom nav, pointing down */
+  #tutorial-hand-x {
+    position:fixed; z-index:60; pointer-events:none;
+    display:none; width:max-content; text-align:left;
+    font:58px/1 system-ui,sans-serif;
+    filter:drop-shadow(0 5px 5px rgba(0,0,0,.45));
+    animation:tutorial-point-down 1.15s ease-in-out infinite;
+  }
+  #tutorial-hand-x p {
+    display:block; width:max-content; margin-bottom:2px; padding:6px 10px; border-radius:6px;
+    background:#f6c619; color:#111; font:900 12px/1.2 "Courier New",monospace;
+    letter-spacing:.5px; white-space:nowrap; box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  nav button.tutorial-glow-nav {
+    background:#f6c619; color:#111;
+    animation:nav-pulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes tutorial-point-down { 
+    0%,100% { transform:translateY(0); } 50% { transform:translateY(9px); } }
+  
+  @keyframes nav-pulse {
+    0%,100% { box-shadow:0 0 0 3px #fff, 0 0 14px rgba(246,198,25,.5); }
+    50%     { box-shadow:0 0 0 6px #fff, 0 0 30px rgba(246,198,25,.9); }  }
+
+  @keyframes tutorial-point-up { 
+    0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+
+  @keyframes back-pulse {
+    0%,100% { box-shadow:0 0 0 3px #f6c619, 0 0 14px rgba(246,198,25,.4); }
+    50%     { box-shadow:0 0 0 6px #f6c619, 0 0 30px rgba(246,198,25,.75); }
+  }
+  #tutorial-message { position:fixed; z-index:60; pointer-events:none; padding:10px 14px; 
+    border:1px solid rgba(246,198,25,.7); border-radius:7px; background:#f6c619; color:#111; 
+    font:900 13px/1.25 "Courier New",monospace; letter-spacing:.5px; box-shadow:0 8px 24px rgba(0,0,0,.35); white-space:nowrap; }
+  #tutorial-skip { 
+    position:fixed; z-index:61; top:calc(16px + env(safe-area-inset-top,0px)); 
+    right:calc(16px + env(safe-area-inset-right,0px)); border:1px solid rgba(255,255,255,.45); 
+    border-radius:999px; padding:9px 14px; background:rgba(12,12,12,.8); color:#fff; font:700 12px "Courier New",monospace; cursor:pointer; }
+
+  @keyframes tutorial-point { 
+    0%,100% { transform:translate(0,0) rotate(-12deg); } 50% { transform:translate(-5px,-9px) rotate(-12deg); } }
+
+  @keyframes tutorial-pulse { 
+    0%,100% { box-shadow:0 0 0 3px #f6c619, 0 0 22px rgba(246,198,25,.25), 0 18px 42px rgba(0,0,0,.7); }
+    50% { box-shadow:0 0 0 5px #f6c619, 0 0 38px rgba(246,198,25,.48), 0 18px 42px rgba(0,0,0,.7); } }
+
+  @media (prefers-reduced-motion:reduce) { 
+    #tutorial-hand, #tutorial-hand-back, #tutorial-hand-x, nav button.tutorial-glow-nav, 
+    #expanded-back.tutorial-glow, body.tutorial-step-1 .piece.tutorial-target { animation:none; } }
+
+
+
+  /* SECOND-TUTORIAL  */
+  .click-overlay {
+    position: absolute; inset: 0;              /* Covers only the content */
+    width: 100%; height: 100%;
+    display: flex; align-items: center;  justify-content: center;
+    /* Optional dark layer over just this div */
+    background: rgba(0, 0, 0, 0.35); z-index: 10;
+    cursor: pointer;
+    animation: appearFade 2s ease-in-out infinite;
+  }
+  .click-text {
+    color: #fff; font-size: clamp(1.2rem, 4vw, 2rem);
+    font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; }
+  @keyframes appearFade {
+    0% { opacity: 0.3; }
+    50% {  opacity: 1; }
+    100% { opacity: 0.3; }
+  }
+
+
+
+
+  /* ---------- Help (replay tutorial) button ---------- */
+  #help-btn {
+    position:fixed; z-index:15;
+    top:calc(14px + env(safe-area-inset-top, 0px));
+    right:calc(14px + env(safe-area-inset-right, 0px));
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.35); background:rgba(12,12,12,.75); color:#fff;
+    font:900 20px/1 "Courier New", monospace; cursor:pointer;
+    backdrop-filter:blur(6px); box-shadow:0 6px 16px rgba(0,0,0,.5);
+    transition:opacity .25s ease, background .2s ease;
+  }
+  #help-btn:focus-visible { outline:3px solid #f6c619; outline-offset:3px; }
+  body.is-expanded #help-btn, body.tutorial-step-1 #help-btn { opacity:0; pointer-events:none; visibility:hidden; }
+
+  /* ---------- Tooltip ---------- */
+  #tip {
+    position:fixed; z-index:70; left:0; top:0; max-width:240px; pointer-events:none;
+    padding:8px 11px; border-radius:7px; background:#f4f3ee; color:#111;
+    font:700 12px/1.4 "Courier New", monospace; letter-spacing:.3px;
+    box-shadow:0 8px 24px rgba(0,0,0,.45);
+    opacity:0; transform:translateY(4px); transition:opacity .15s ease, transform .15s ease;
+  }
+  #tip.show { opacity:1; transform:translateY(0); }
+  #tip strong { display:block; font-weight:900; letter-spacing:.6px; }
+  #tip span { font-weight:400; opacity:.8; }
+
+  /* ---------- Hover effects (mouse devices only) ---------- */
+  @media (hover:hover) {
+    .piece:not(.on):hover { filter:brightness(1.1); }
+    nav button:not(.cur):hover { background:#3a3a40; }
+    nav button.cur:hover { filter:brightness(1.08); }
+    #expanded-back:hover { background:rgba(246,198,25,.35); }
+    #help-btn:hover { background:#f6c619; color:#111; }
+    #tutorial-skip:hover { background:rgba(255,255,255,.2); }
+  }
+  @media (prefers-reduced-motion: reduce) { #tip { transition-duration:.05ms !important; } }
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="world">
+    <div class="tape t1"></div>
+    <div class="tape t2"></div>
+    <div class="holo">★</div>
+
+
+    <section class="piece id " data-name="intro" data-rot="-2" tabindex="0" aria-label="About Abdulmalik">
+      <div class="teaser">
+        <span class="sticker">HELLO!</span>
+        <div class="photo" aria-label="Portrait photograph placeholder"> <img src="IMG_5.JPG"> YOUR<br>PORTRAIT</div>
+        <h2>ABDULMALIK<br>AKANDE</h2>
+        <p style="margin:7px 0 12px; font-weight:700">Software Developer<br>&amp; Web Developer</p>
+        <div class="lines" style="clear:both;padding-top:5px"><span></span><span></span><span style="width:70%"></span></div>
+        <div class="hint">TAP TO OPEN ▸ ABOUT ME</div>
+      </div>
+      <div class="detail">
+
+        <div class="click-overlay hidden"><span class="click-text">Click me</span></div>
+
+        <h3>INTRODUCTION</h3>
+        <p>I'm Abdulmalik Akande, a software developer and web developer based in Lagos, Nigeria. I enjoy learning how technology works and using that knowledge to build practical digital experiences.</p>
+        <p style="margin-top:14px">My background is in Philosophy, which has strengthened the way I approach questions, analyse problems and think critically. I bring that perspective into my development journey, alongside curiosity, persistence and a commitment to continuous learning.</p>
+        <table>
+          <tr><td>Name</td><td>Abdulmalik Akande</td></tr>
+          <tr><td>Role</td><td>Software Developer &amp; Web Developer</td></tr>
+          <tr><td>Location</td><td>Lagos, Nigeria</td></tr>
+          <tr><td>Email</td><td><a class="contact-link" href="mailto:abdulmalikakande4@gmail.com">abdulmalikakande4@gmail.com</a></td></tr>
+        </table>
+        <p style="margin-top:22px"><b>Currently:</b> NYSC Corps Member · Interested in software engineering, artificial intelligence and open-source technologies.</p>
+      </div>
+    </section>
+
+
+    <section class="piece ticket" data-name="Projects" data-rot="-90" tabindex="0">
+      <div class="teaser">
+        <h2>SELECTED<br>PROJECTS</h2>
+        <p style="margin-top:10px">Things I've built<br>and explored.</p>
+        <div class="yr" style="font-size:44px">04 / 作品</div>
+        <div class="barcode"></div>
+        <div class="hint" style="color:#111">TAP TO OPEN ▸ PROJECTS</div>
+      </div>
+      <div class="detail">
+
+        <h3>SELECTED PROJECTS</h3>
+        <p>A selection of projects from my development journey. Each one represents a practical opportunity to learn, solve a problem and improve my approach to building software.</p>
+        <div class="project-list">
+
+          <article class="project-item">
+            <div class="project-shot has-img">
+              <img src="data:image/jpeg;base64,/9j/" alt="Calculator app: dark card with a keypad and the message 'let's get calculating'">
+            </div>
+            <b>01 · CALCULATOR</b>
+            <p>An interactive simple calculator I built to learn JavaScript. It handles everyday arithmetic with large, easy-to-tap keys and a clean dark interface. Calculator project built around clear input, readable results and essential arithmetic operations</p>
+            <div class="tech-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+            </div>
+            <details>
+              <summary>FEATURES &amp; TECH ▾</summary>
+              <ul>
+                <li>Addition, subtraction, multiplication and division</li>
+                <li>Decimal input and a quick "00" key</li>
+                <li>AC clears everything; DE deletes the last digit</li>
+                <li>Responsive layout that works on phones</li>
+              </ul>
+            </details>
+            <p><a class="contact-link" href="https://kevinola.github.io/js-project-calculator/" target="_blank" rel="noopener">Live demo ↗</a></p>
+          </article>
+
+          <article class="project-item">
+            <div class="project-shot">CIVILREPORT<br>PROJECT IMAGE</div>
+            <b>02 · CIVILREPORT</b>
+            <p>A full-stack cross-platform mobile app that lets citizens report incidents such as accidents, fighting or vandalism. Reports go to a central server where other users can see them. Built for the Bincom Academy Mobile App Class test.</p>
+            <div class="tech-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Apache Cordova</span><span>WordPress REST API</span><span>JWT Auth</span><span>Camera plugin</span><span>GEO-LOCATION plugin</span>
+            </div>
+            <details>
+              <summary>FEATURES &amp; TECH ▾</summary>
+              <ul>
+                <li>User login with JWT authentication</li>
+                <li>Submit an incident with a title, category and description</li>
+                <li>Capture the incident's location (latitude and longitude)</li><li>Attach a photo of the incident</li>
+                <li>Live feed of all incidents, newest first</li>
+                <li>Filter by category, or show only your own reports</li>
+                <li>In-app notification when a new incident is posted (the app checks the server every 15 seconds)</li>
+              </ul>
+              <p class="project-meta">Backend: WordPress, with each incident stored as a post. Built and tested with LocalWP, Node.js and the Android SDK; packaged as an Android APK.</p>
+            </details>
+            <p><a class="contact-link" href="https://kevinola.github.io/Angular-first-portfolio-/" target="_blank" rel="noopener">Live demo ↗</a></p>
+          </article>
+
+          <article class="project-item">
+            <div class="project-shot">BLOG APP<br>PROJECT IMAGE</div>
+            <b>03 · BLOG APP</b>
+            <p>A mobile-friendly blog app where users can sign up, log in, publish posts and read other people's posts. WordPress acts as the backend and database, and the app talks to it through JSON API calls written in JavaScript.</p>
+            <div class="tech-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Apache Cordova</span><span>WordPress</span><span>JSON</span>
+            </div>
+            <details>             
+             <summary>FEATURES &amp; TECH ▾</summary>
+              <ul>
+                <li>Sign up and log in</li>
+                <li>Publish a new blog entry</li>
+                <li>View all posts and filter them</li>
+                <li>Posts are stored on the server, so every user sees them</li>
+                <li>Can be packaged as an Android app with Cordova</li>
+              </ul>
+              
+              <p class="project-meta">Hosted on InfinityFree. Data is fetched with JavaScript fetch requests to the WordPress API.</p>
+            </details>
+            <p><a class="contact-link" href="https://abdulmalik.gt.tc/app/index.html" target="_blank" rel="noopener">Live demo ↗</a></p>
+          </article>
+          
+          <article class="project-item">
+            <div class="project-shot">MANGA APP<br>PROJECT IMAGE</div>
+            <b>04 · MANGA APP</b
+            ><p>A manga-focused application exploring digital reading and tools that support the manga-reading experience.</p><p class="project-meta">Image, confirmed features, technology stack and repository link to be added.</p>
+            <details>
+              <div class="tech-tags"><span>koltin</span><span>python</span><span>ORC</span></div>
+            </details>
+          </article>
+
+        </div>
+        <!--p style="margin-top:22px"><b>VISIT OTHER PORTFOLIO:</b> <a class="contact-link" href="https://kevinola.github.io/CV_Profile_Pofolia/#contacts" target="_blank" rel="noopener">FIRST EVER Portfolio ↗</a></p--><br><br>
+
+        <p class="small" style="margin-top:10px">
+          More projects to make. And More to learn.</p>
+
+        <div class="project-quote">
+          <p>Each project is a step —<br>from an idea to a working solution.</p><span class="quote-signature"><span class="spinstar">✳</span> KEEP BUILDING</span></div>
+
+      </div>
+    </section>
+
+
+    <section class="piece paper" data-name="experience" data-rot="2" tabindex="0">
+      <div class="teaser">
+        <h2>THE JOURNEY</h2>
+        <p style="margin-top:12px">A different academic path.<br>A growing technical practice.</p>
+        <div class="now">2020 → NOW</div>
+        <div class="hint">TAP TO OPEN ▸ EDUCATION &amp; EXPERIENCE</div>
+      </div>
+      <div class="detail">
+        <h3>EDUCATION &amp; EXPERIENCE</h3>
+        <div class="role"><b>B.A. Philosophy · Lagos State University</b>2021–2025</div>
+        <div class="role"><b>WASSCE · Dominion College</b>2013–2019</div>
+        <div class="role"><b>Associate · Global T&amp;T Solutions Ltd</b>February 2020 – January 2021<br>Maintained documentation and operational records, handled data entry, coordinated meetings, prepared minutes and supported daily administration.</div>
+        <div class="role"><b>NYSC Corps Member</b>Currently serving</div>
+        <p style="margin-top:22px">My academic and work experiences have helped me develop transferable strengths in critical thinking, organisation, communication, teamwork and attention to detail.</p>
+        <p style="margin-top:16px"><b>Beyond code:</b> Philosophy, reading, writing, photography and exploring ideas.</p>
+      </div>
+    </section>
+
+    <section class="piece skills" data-name="Skills" data-rot="-1" tabindex="0">
+      <div class="teaser">
+        <h2>TOOLKIT</h2>
+        <div class="badges"> <i>HTML&CSS</i> <i>JS</i><i>TS</i></div>
+        <div class="badges"><i>PHP</i><i>LARAVEL</i></div>
+        <p class="small">Languages &amp; technologies</p>
+        <div class="hint">TAP TO OPEN ▸ TECHNICAL SKILLS</div>
+      </div>
+      <div class="detail">
+        <h3>TECHNICAL SKILLS</h3>
+        <div class="skill-group"><b>Frontend</b><p>HTML5 · CSS · JavaScript</p></div>
+        <div class="skill-group"><b>Backend &amp; Databases</b><p>PHP · SQL · JavaScript · TypeScript</p></div>
+        <div class="skill-group"><b>Programming</b><p>Python</p></div>
+
+        <div class="skill-group"><b>FRAMWORKS</b><p>Angular · Laravel</p></div>
+
+        <div class="skill-group"><b>Other</b><p>Microsoft Office · AI TOOLS</p></div>
+        <div class="skill-group"><b>Professional strengths</b><div class="soft-skills"><span>Problem-solving</span><span>Communication</span><span>Teamwork</span><span>Attention to detail</span><span>Adaptability</span><span>Fast learner</span></div></div>
+        <p style="margin-top:22px">I continue to develop my technical skills through practical projects, independent learning and experimentation.</p>
+        <p class="small" style="margin-top:14px">Skills listed here are based on my CV. Frameworks and tools can be added as project experience is confirmed.</p>
+      </div>
+    </section>
+
+
+    <section class="piece contact-piece" data-name="Contact" data-rot="-12" tabindex="0">
+      <div class="teaser">
+        <h2>GET IN TOUCH</h2>
+        <p style="margin-top:6px">Open to collaboration, conversations and new opportunities.</p>
+        <div class="hint">EMAIL ↗ &nbsp; · &nbsp; TAP TO OPEN</div>
+      </div>
+      <div class="detail">
+        <h3>GET IN TOUCH</h3>
+        <p>I'm open to collaboration and new opportunities to grow as a developer.</p>
+
+        <div class="footer-col contact-details">
+            <h3>Contact Info</h3>
+            <ul class="contact-list">
+                <li>
+                    <a href="mailto:abdulmalikakande4@gmail.com">
+                        <i class="fa fa-regular fa-envelope"></i> abdulmalikakande4@gmail.com
+                    </a>
+                </li>
+                <li>
+                    <a href="tel:08068778415">
+                        <i class="fa fa-solid fa-phone"></i> 08068778415
+                    </a>
+                </li>
+                <li>
+                    <span>
+                        <i class="fa fa-solid fa-map-marker"></i>Lagos, Nigeria
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer-col contact-social"> 
+            <h3>Connect</h3>
+            <div class="social-links">
+                <a href="https://github.com/kevinola" aria-label="GitHub"><i class="fa fa-brands fa-github">.</i></a>
+                <a href="will-get-back-on-that" aria-label="LinkedIn"><i class="fa fa-brands fa-linkedin-square">.</i></a>
+                <a href="mailto:abdulmalikakande4@gmail.com" aria-label="Email"><i class="fa fa-regular fa-envelope">.</i></a>
+            </div>
+        </div>
+
+      </div>
+    </section>
+
+
+  </div>
+</div>
+
+<nav id="nav"></nav>
+<button id="expanded-back" type="button" aria-label="Back to focused card" data-tip="Close the reading view and go back to the card">←</button>
+<button id="help-btn" type="button" aria-label="Replay the tutorial" data-tip="Replay the tutorial">?</button>
+
+
+<div id="tutorial-hand" aria-hidden="true">
+  👆 <p>TAP TO BEGIN</p>
+</div>
+<div id="tutorial-hand-back" aria-hidden="true">
+  👆 <p>TAP TO GO BACK</p>
+</div>
+<div id="tutorial-hand-x" aria-hidden="true">
+  <p>TAP X TO SEE THE WHOLE BAG</p>👇
+</div>
+<button id="tutorial-skip" type="button" data-tip="End the tutorial and explore freely">Skip tutorial</button>
+
+
+
+
+<script>
+  const viewport = document.getElementById("viewport");
+  const world = document.getElementById("world");
+  const pieces = [...document.querySelectorAll(".piece")];
+  const nav = document.getElementById("nav");
+  const backButton = document.getElementById("expanded-back");
+  const NAV_H = 84;        // space kept free for the buttons
+  let current = null;      // focused piece, or null for the whole bag
+  let angle = 0;           // current camera rotation (so we always turn the short way)
+  let expanded = false;
+  let expandedShell = null;
+  let expandedDetail = null;
+  let returnRect = null;
+  let returnPiece = null;
+  let closing = false;
+  let ignoreNextPopState = false;
+  const scrollPositions = new WeakMap();
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const EXPAND_MS = reduceMotion.matches ? 1 : 800;
+
+  const near = t => t + 360 * Math.round((angle - t) / 360);
+
+
+
+
+
+
+  const tutorialKey = "abdulmalikPortfolioTutorialIntroDone";
+  const REMEMBER_TUTORIAL = true; 
+  const STAGE = { DISCOVER: 1, EXPLORE: 2, RETURN: 3, RESET: 4, COMPLETE: 5 };
+  const tutorialHandX = document.getElementById("tutorial-hand-x");
+  const aboutPiece = pieces.find(p => p.dataset.name === "intro");
+  const tutorialHand = document.getElementById("tutorial-hand");
+  const tutorialSkip = document.getElementById("tutorial-skip");
+  let clickOverlay = aboutPiece.querySelector(".click-overlay");
+  let tutorialStage = STAGE.COMPLETE;
+  let tutorialActive = false;
+  let backPromptTimer = null;
+  let TOOLTIPS_ENABLE = true;
+
+  function positionTutorialPointer() {
+    if (tutorialStage !== STAGE.DISCOVER || !aboutPiece) return;
+    const r = aboutPiece.getBoundingClientRect();
+    tutorialHand.style.left = `${Math.min(window.innerWidth - 78, Math.max(8, r.right - 66))}px`;
+    tutorialHand.style.top = `${Math.min(window.innerHeight - 90, Math.max(8, r.bottom - 72))}px`;
+  }
+
+  // Tutorial Stage 1 -> 2: About was tapped and is now focused. Hand goes, CLICK ME fades in.
+  function enterExploreStage() {
+    tutorialStage = STAGE.EXPLORE;
+    document.body.classList.remove("hands");
+    clickOverlay.classList.remove("hidden");
+  }
+
+  // Tutorial Stage 2 -> 3: reading view opens. CLICK ME goes, hand points at Back.
+  function enterReturnStage() {
+    tutorialStage = STAGE.RETURN;
+    clickOverlay.remove();
+    // Wait for the expand animation so the hand doesn't appear before the Back button does.
+    backPromptTimer = setTimeout(() => {
+      if (tutorialStage !== STAGE.RETURN || !expanded) return;
+      document.body.classList.add("hands-back");
+      backButton.classList.add("tutorial-glow");
+    }, EXPAND_MS + 150);
+  }
+
+
+  function hideBackPrompt() {
+    clearTimeout(backPromptTimer);
+    document.body.classList.remove("hands-back");
+    backButton.classList.remove("tutorial-glow");
+  }
+
+
+
+  // Stage 4: back on the focused About card. Hand points down at the X button.
+  function positionXHand() {
+    if (tutorialStage !== STAGE.RESET) return;
+    const xb = nav.firstElementChild;
+    if (!xb) return;
+    const r = xb.getBoundingClientRect();
+    tutorialHandX.style.left = `${Math.max(8, r.left + r.width / 2 - 29)}px`;
+    tutorialHandX.style.bottom = `${window.innerHeight - r.top + 6}px`;
+  }
+
+  function enterResetStage() {
+    tutorialStage = STAGE.RESET;
+    document.body.classList.add("hands-x");
+    nav.firstElementChild.classList.add("tutorial-glow-nav");
+    nav.scrollLeft = 0;            // make sure X is visible if the nav scrolls
+    positionXHand();
+  }
+
+  // Stage 5: only now do the blanket, highlight and hands go away.
+  function completeTutorial() {
+    if (tutorialStage === STAGE.COMPLETE) return;
+    tutorialStage = STAGE.COMPLETE;
+    tutorialActive = false;
+    TOOLTIPS_ENABLE = true;
+    if (REMEMBER_TUTORIAL) localStorage.setItem(tutorialKey, "done");
+    hideBackPrompt();
+    clickOverlay.remove();
+    document.body.classList.remove("hands", "hands-x", "tutorial-step-1");
+    if (nav.firstElementChild) nav.firstElementChild.classList.remove("tutorial-glow-nav");
+    aboutPiece.classList.remove("tutorial-target");
+    world.classList.remove("blanket");
+  }
+
+  tutorialSkip.addEventListener("click", completeTutorial);
+
+ 
+
+  // Replay: reset the view to the whole bag and run the tutorial from stage 1 again.
+  function startTutorial() {
+    if (expanded || closing || tutorialStage !== STAGE.COMPLETE) return;
+    clickOverlay = document.createElement("div");
+    clickOverlay.className = "click-overlay hidden";
+    clickOverlay.innerHTML = '<span class="click-text">Click me</span>';
+    aboutPiece.querySelector(".detail").prepend(clickOverlay);
+
+    world.style.transition = "none"; current = null; render(); world.offsetWidth; world.style.transition = "";
+
+    tutorialStage = STAGE.DISCOVER;
+    tutorialActive = true;
+    TOOLTIPS_ENABLE = false;
+    aboutPiece.classList.add("tutorial-target");
+    world.classList.add("blanket");
+    document.body.classList.add("tutorial-step-1", "hands");
+    positionTutorialPointer();
+  }
+
+
+  document.getElementById("help-btn").addEventListener("click", startTutorial);
+
+
+  // Keep the first hand on About while the bag finishes its zoom animation.
+  world.addEventListener("transitionend", e => {
+    if (e.target === world && e.propertyName === "transform") positionTutorialPointer();
+  });
+
+  addEventListener("resize", () => {
+    if (!expanded && !closing) {
+      world.style.transition = "none"; render(); world.offsetWidth; world.style.transition = "";
+    }
+    positionTutorialPointer();
+    positionXHand();
+  });
+
+
+  if (!localStorage.getItem(tutorialKey) && aboutPiece) {
+    tutorialStage = STAGE.DISCOVER;
+    tutorialActive = true;
+    aboutPiece.classList.add("tutorial-target");
+    world.classList.add("blanket");
+    document.body.classList.add("tutorial-step-1", "hands");
+    positionTutorialPointer();
+  }
+
+
+
+
+
+  function render() {
+    const vw = viewport.clientWidth, vh = viewport.clientHeight - NAV_H;
+    const shift = -NAV_H / 2;
+    let scale, dx = 0, dy = 0;
+
+    if (!current) {
+      angle = near(0);
+      scale = Math.min(vw / world.offsetWidth, vh / world.offsetHeight) * 0.96;
+    } else {
+      const rot = +current.dataset.rot;
+      angle = near(-rot);
+      const turned = Math.abs(rot) % 180 === 90;
+      const w = turned ? current.offsetHeight : current.offsetWidth;
+      const h = turned ? current.offsetWidth : current.offsetHeight;
+      scale = Math.min(vw / w, vh / h) * 0.94;
+      dx = current.offsetLeft + current.offsetWidth / 2 - world.offsetWidth / 2;
+      dy = current.offsetTop + current.offsetHeight / 2 - world.offsetHeight / 2;
+    }
+    world.style.transform =
+      `translate3d(0px, ${shift}px, 0) rotate(${angle}deg) scale(${scale}) translate3d(${-dx}px, ${-dy}px, 0)`;
+
+    pieces.forEach(p => p.classList.toggle("on", p === current));
+    [...nav.children].forEach(b => b.classList.toggle("cur", b._piece === current));
+  }
+
+
+
+
+  function go(piece) {
+    if (expanded || closing) return;
+    if (tutorialActive) {
+      if (tutorialStage === STAGE.RESET) {
+        if (piece !== null) return;              // only the X button is allowed now
+        completeTutorial();
+      } else {
+        if (piece !== aboutPiece) return;        // only About is allowed until then
+        if (tutorialStage === STAGE.DISCOVER) enterExploreStage();
+      }
+    }
+    current = piece;
+    render();
+  }
+
+
+
+  function makeExpandedShell(piece, detail) {
+    const rect = piece.getBoundingClientRect();
+    const style = getComputedStyle(piece);
+    const shell = document.createElement("div");
+    shell.id = "expanded-shell";
+    shell.setAttribute("role", "region");
+    shell.setAttribute("aria-label", `${piece.dataset.name} details`);
+    shell.style.left = "0px";
+    shell.style.top = "0px";
+    shell.style.width = "100vw";
+    shell.style.height = "100dvh";
+    shell.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0) scale(${rect.width / window.innerWidth}, ${rect.height / window.innerHeight})`;
+    shell.style.background = style.backgroundColor;
+    shell.style.color = style.color;
+    shell.style.borderRadius = style.borderRadius;
+    shell.style.border = style.border;
+    shell.style.overflow = "hidden";
+    detail.classList.add("is-expanded-detail");
+    shell.appendChild(detail);
+    document.body.appendChild(shell);
+    // Commit the card-sized starting transform before the opening animation.
+    shell.getBoundingClientRect();
+    return { shell, rect };
+  }
+
+
+
+
+
+  function expandCurrent() {
+    if (!current || expanded || closing) return;
+    const piece = current;
+    const detail = piece.querySelector(".detail");
+    if (!detail) return;
+
+    // The overlay must be gone before the detail moves into the reading view.
+    if (tutorialStage === STAGE.EXPLORE && piece === aboutPiece) enterReturnStage();
+
+    returnPiece = piece;
+    const made = makeExpandedShell(piece, detail);
+    expandedShell = made.shell;
+    expandedDetail = detail;
+    returnRect = made.rect;
+    expanded = true;
+    document.body.classList.add("is-expanded");
+    backButton.style.color = getComputedStyle(piece).color;
+    backButton.setAttribute("aria-label", `Back to ${piece.dataset.name} card`);
+
+    // Give the browser a frame to register the card-sized starting geometry,
+    // then expand that same content element to the viewport.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (!expanded || !expandedShell) return;
+      expandedShell.style.transform = "translate3d(0, 0, 0) scale(1, 1)";
+      expandedShell.style.borderRadius = "0px";
+      expandedShell.style.border = "0";
+      expandedShell.style.overflow = "hidden";
+      expandedShell.classList.add("is-open");
+      window.setTimeout(() => {
+        if (!expanded || !expandedShell) return;
+        expandedShell.style.overflowY = "auto";
+        expandedShell.style.overflowX = "hidden";
+        expandedShell.scrollTop = scrollPositions.get(returnPiece) || 0;
+        backButton.style.color = getComputedStyle(returnPiece).color;
+      }, EXPAND_MS);
+    }));
+
+    // Make Android/browser Back close the expanded view first.
+    history.pushState({ portfolioBagExpanded: true }, "", location.href);
+  }
+
+
+
+
+
+  function closeExpanded(fromPopState = false) {
+    if (!expanded || closing || !expandedShell || !expandedDetail || !returnPiece) return;
+    closing = true;
+    if (tutorialStage === STAGE.RETURN) hideBackPrompt();
+    const shell = expandedShell;
+    const detail = expandedDetail;
+    const piece = returnPiece;
+    scrollPositions.set(piece, shell.scrollTop || 0);
+    // Contract from the top of the reading view, while keeping the saved reading
+    // position for the next time this section is opened.
+    shell.scrollTop = 0;
+    shell.style.overflow = "hidden";
+    shell.classList.remove("is-open");
+    const rect = piece.getBoundingClientRect();
+
+    requestAnimationFrame(() => {
+      shell.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0) scale(${rect.width / window.innerWidth}, ${rect.height / window.innerHeight})`;
+      shell.style.borderRadius = getComputedStyle(piece).borderRadius;
+      shell.style.border = getComputedStyle(piece).border;
+    });
+
+    const finish = () => {
+      if (!closing) return;
+      piece.appendChild(detail);
+      detail.classList.remove("is-expanded-detail");
+      shell.remove();
+      expanded = false;
+      closing = false;
+      expandedShell = null;
+      expandedDetail = null;
+      returnPiece = null;
+      returnRect = null;
+      document.body.classList.remove("is-expanded");
+      backButton.style.color = "inherit";
+      backButton.setAttribute("aria-label", "Back to focused card");
+      render();
+      if (tutorialStage === STAGE.RETURN) enterResetStage();
+      if (!fromPopState && history.state && history.state.portfolioBagExpanded) {
+        ignoreNextPopState = true;
+        history.back();
+      }
+    };
+    window.setTimeout(finish, EXPAND_MS);
+  }
+
+
+
+
+  // Buttons: X for the whole bag, then one per piece.
+  const x = document.createElement("button");
+  x.textContent = "X"; x.setAttribute("aria-label", "Show whole bag"); x._piece = null;
+  x.onclick = () => go(null);
+  nav.append(x);
+
+
+  pieces.forEach(p => {
+    const b = document.createElement("button");
+    b.textContent = p.dataset.name; b._piece = p;
+    b.onclick = () => go(p);
+    nav.append(b);
+    p.addEventListener("click", e => {
+      // Let links and interactive controls inside a section do their own job.
+      if (e.target.closest("a, button, input, textarea, select, summary, [contenteditable='true']")) return;
+      if (expanded || closing) return;
+      if (current !== p) go(p);
+      else expandCurrent();
+    });
+    p.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if (e.target !== p && e.target.closest("a, button, input, textarea, select, [contenteditable='true']")) return;
+      e.preventDefault();
+      if (current !== p) go(p);
+      else expandCurrent();
+    });
+  });
+
+
+
+  backButton.addEventListener("click", () => closeExpanded());
+  addEventListener("popstate", () => {
+    if (ignoreNextPopState) { ignoreNextPopState = false; return; }
+    if (expanded) closeExpanded(true);
+    else if (current) go(null);
+  });
+
+  addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      if (expanded) closeExpanded();
+      else if (current) go(null); 
+    }
+  });
+
+  addEventListener("resize", () => {
+    if (expanded || closing) return;
+    world.style.transition = "none"; render(); world.offsetWidth; world.style.transition = "";
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+  // ---------- Tooltips ----------
+  // Mouse: hover. Keyboard: focus. Touch: long-press (a normal tap still does its normal job).
+  const PIECE_INFO = {
+    intro:      ["About me", "Who I am, my background and what I'm focused on now."],
+    Projects:   ["Projects", "Things I've built and explored."],
+    experience: ["Experience", "My education and work history."],
+    Skills:     ["Skills", "Languages, tools and strengths."],
+    Contact:    ["Contact", "Email, phone and social links."]
+  };
+  nav.firstElementChild.dataset.tip = "Zoom out to see the whole bag";
+  [...nav.children].forEach(b => {
+    if (b._piece && PIECE_INFO[b._piece.dataset.name]) {
+      const [t, d] = PIECE_INFO[b._piece.dataset.name];
+      b.dataset.tip = `Jump to ${t}: ${d}`;
+    }
+  });
+
+  const tip = document.createElement("div");
+  tip.id = "tip"; tip.setAttribute("role", "tooltip");
+  document.body.appendChild(tip);
+
+  let tipTimer = null, tipHideTimer = null, pressTimer = null, suppressClick = false;
+
+  const tipTarget = t => (t && t.closest) ? t.closest("[data-tip], .piece") : null;
+
+  function tipHTML(el) {
+    if(!TOOLTIPS_ENABLE || tutorialActive) return null;
+
+    if (el.classList.contains("piece")) {
+      if (expanded || closing) return null;
+      const info = PIECE_INFO[el.dataset.name];
+      if (!info) return null;
+      const action = current === el ? "Tap again to open the full section" : "Tap to zoom in";
+      return `<strong>${info[0]}</strong><span>${info[1]}<br>${action}</span>`;
+    }
+    return el.dataset.tip ? `<span style="opacity:1">${el.dataset.tip}</span>` : null;
+  }
+
+  function placeTip(el, e) {
+    const w = tip.offsetWidth, h = tip.offsetHeight, vw = innerWidth, vh = innerHeight, m = 8;
+    let x, y;
+    if (el.classList.contains("piece") && e && e.clientX != null) {
+      x = e.clientX + 14; y = e.clientY + 18;
+      if (x + w > vw - m) x = e.clientX - w - 14;
+      if (y + h > vh - m) y = e.clientY - h - 14;
+    } else {
+      const r = el.getBoundingClientRect();
+      x = r.left + r.width / 2 - w / 2;
+      y = r.top - h - 10;
+      if (y < m) y = r.bottom + 10;
+      if (y + h > vh - m) y = vh - h - m;
+    }
+    tip.style.left = Math.max(m, Math.min(x, vw - w - m)) + "px";
+    tip.style.top = Math.max(m, Math.min(y, vh - h - m)) + "px";
+  }
+
+  function showTip(el, e) {
+    const html = tipHTML(el);
+    if (!html) { hideTip(); return; }
+    tip.innerHTML = html;
+    placeTip(el, e);
+    tip.classList.add("show");
+  }
+  function hideTip() {
+    clearTimeout(tipTimer); clearTimeout(tipHideTimer);
+    tip.classList.remove("show");
+  }
+
+  document.addEventListener("pointerover", e => {
+    if (e.pointerType === "touch") return;
+    const el = tipTarget(e.target);
+    if (!el) return;
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(() => showTip(el, e), 250);
+  });
+  document.addEventListener("pointermove", e => {
+    if (e.pointerType === "touch") return;
+    const el = tipTarget(e.target);
+    if (!el || !el.classList.contains("piece")) return;
+    if (tip.classList.contains("show")) placeTip(el, e);
+    else { clearTimeout(tipTimer); tipTimer = setTimeout(() => showTip(el, e), 250); }
+  });
+  document.addEventListener("pointerout", e => {
+    if (e.pointerType === "touch") return;
+    const el = tipTarget(e.target);
+    if (el && !el.contains(e.relatedTarget)) hideTip();
+  });
+
+  document.addEventListener("pointerdown", e => {
+    suppressClick = false;
+    hideTip();
+    if (e.pointerType !== "touch") return;
+    const el = tipTarget(e.target);
+    if (!el) return;
+    clearTimeout(pressTimer);
+    pressTimer = setTimeout(() => {
+      if (!tipHTML(el)) return;
+      suppressClick = true;                 // the lift after a long-press must not count as a tap
+      showTip(el, e);
+      tipHideTimer = setTimeout(hideTip, 3000);
+    }, 500);
+  });
+  ["pointerup", "pointercancel", "pointermove"].forEach(type =>
+    document.addEventListener(type, e => { if (e.pointerType === "touch" && type !== "pointermove") clearTimeout(pressTimer); }));
+  document.addEventListener("scroll", () => clearTimeout(pressTimer), true);
+  document.addEventListener("click", e => {
+    if (!suppressClick) return;
+    suppressClick = false;
+    e.stopPropagation(); e.preventDefault();
+  }, true);
+  document.addEventListener("contextmenu", e => {
+    if (suppressClick || (e.pointerType === "touch" && tipTarget(e.target))) e.preventDefault();
+  });
+
+  document.addEventListener("focusin", e => {
+    const el = tipTarget(e.target);
+    if (el && e.target.matches(":focus-visible")) showTip(el, null);
+  });
+  document.addEventListener("focusout", hideTip);
+  addEventListener("keydown", hideTip);
+
+
+
+  render();
+
+</script>
+
+
+</body>
+</html>
