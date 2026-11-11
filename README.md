@@ -46,13 +46,6 @@ The whole portfolio is one HTML file with hand-written CSS and vanilla JavaScrip
 1. Download or clone this repository.
 2. Open `index.html` in any modern browser.
 
-## Host it on GitHub Pages
-
-1. Rename the portfolio file to `index.html` and push it to a GitHub repository.
-2. In the repository, go to **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and the `/ (root)` folder, then save.
-4. After a minute or two the site is live at `https://YOUR-USERNAME.github.io/YOUR-REPO/`.
-
 ## Credits
 
 - **Design inspiration:** a graphic design portfolio by **[ORIGINAL DESIGNER'S NAME / LINK]**, which showed documents arranged in an investigation bag. This project is my own interactive interpretation of that idea, and all code is my own.
