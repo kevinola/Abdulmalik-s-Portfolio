@@ -48,7 +48,7 @@ The whole portfolio is one HTML file with hand-written CSS and vanilla JavaScrip
 
 ## Credits
 
-- **Design inspiration:** a graphic design portfolio by **[ORIGINAL DESIGNER'S NAME / LINK]**, which showed documents arranged in an investigation bag. This project is my own interactive interpretation of that idea, and all code is my own.
+- **Design inspiration:** a graphic design portfolio by **Graphiqvibe** on Thread, which showed documents arranged in an investigation bag. This project is my own interactive interpretation of that idea, and all code is my own.
 - **Icons:** [Font Awesome](https://fontawesome.com)
 - **Typeface:** [Inter](https://rsms.me/inter/) via Google Fonts
 
