@@ -581,24 +581,33 @@
             <p><a class="contact-link" href="https://kevinola.github.io/js-project-calculator/" target="_blank" rel="noopener">Live demo ↗</a></p>
           </article>
 
+
           <article class="project-item">
             <div class="project-shot">CIVILREPORT<br>PROJECT IMAGE</div>
             <b>02 · CIVILREPORT</b>
-            <p>A full-stack cross-platform mobile app that lets citizens report incidents such as accidents, fighting or vandalism. Reports go to a central server where other users can see them. Built for the Bincom Academy Mobile App Class test.</p>
+            <p>A cross-platform mobile and web app that lets citizens report local incidents —crime/safety issues, hazards, vandalism, sanitation and power faults. Reports sync
+               to Firebase in real time so other signed-in residents can see them instantly.
+               Built for the Bincom Academy Mobile App Class test.</p>
             <div class="tech-tags">
-              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Apache Cordova</span><span>WordPress REST API</span><span>JWT Auth</span><span>Camera plugin</span><span>GEO-LOCATION plugin</span>
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Apache Cordova</span><span>Firebase Firestore</span><span>Firebase Authentication</span><span>Cloudinary</span><span>Leaflet / OpenStreetMap</span><span>Camera plugin</span><span>GEO-LOCATION plugin</span>
             </div>
             <details>
               <summary>FEATURES &amp; TECH ▾</summary>
               <ul>
-                <li>User login with JWT authentication</li>
-                <li>Submit an incident with a title, category and description</li>
+                <li>Email/password sign-in with Firebase Auth and persisted sessions</li>
+                <li>Citizen profile with name, phone, state, LGA, street address and avatar</li>
                 <li>Capture the incident's location (latitude and longitude)</li><li>Attach a photo of the incident</li>
-                <li>Live feed of all incidents, newest first</li>
-                <li>Filter by category, or show only your own reports</li>
-                <li>In-app notification when a new incident is posted (the app checks the server every 15 seconds)</li>
+                <li>Submit an incident with a title, category and description</li>
+                <li>Capture the incident's location by GPS, address lookup or a draggable map pin</li>
+                <li>Attach a photo or video from the camera or gallery (compressed, hosted on Cloudinary)</li>
+                <li>Live feed of all incidents, newest first, via Firestore real-time listeners</li>
+                <li>Filter by category, plus a "Your Reports" dashboard showing only your own posts</li>
+                <li>Real-time in-app community alerts for new incidents in your LGA, with an unread badge</li>
+                <li>Interactive map view with incident pins and one-tap emergency (tel:112) banner</li>
               </ul>
-              <p class="project-meta">Backend: WordPress, with each incident stored as a post. Built and tested with LocalWP, Node.js and the Android SDK; packaged as an Android APK.</p>
+              <p class="project-meta">Backend: Google Firebase — each incident is a document in the Firestore "reports" collection, readable only by email/password-authenticated users. Built and tested
+              with Node.js, Firebase CLI and the Android SDK; packaged as an Android APK and
+              also deployable to Firebase Hosting.</p>
             </details>
             <p><a class="contact-link" href="https://kevinola.github.io/Angular-first-portfolio-/" target="_blank" rel="noopener">Live demo ↗</a></p>
           </article>
